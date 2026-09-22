@@ -1,0 +1,929 @@
+﻿/* ==========================================================================
+   SCHOOL EQUIPMENT CHECKER - STYLE SHEET
+   Desain modern, ramah siswa, bertema lingkungan dan kebersihan
+   ========================================================================== */
+
+:root {
+  /* Palet Warna Lingkungan & Kebersihan (Eco & Fresh School) */
+  --primary: #059669;          /* Hijau Emerald */
+  --primary-hover: #047857;
+  --primary-light: #d1fae5;
+  --secondary: #0d9488;        /* Teal */
+  --accent: #10b981;           /* Mint / Fresh Green */
+  
+  /* Status Warna */
+  --success: #16a34a;          /* Hijau Layak */
+  --success-bg: #dcfce7;
+  --warning: #d97706;          /* Kuning/Oranye Waspada */
+  --warning-bg: #fef3c7;
+  --danger: #dc2626;           /* Merah Tidak Layak */
+  --danger-bg: #fee2e2;
+  --idle: #64748b;             /* Abu-abu Siap */
+  --idle-bg: #f1f5f9;
+
+  /* Warna Teks & Latar */
+  --bg-gradient-start: #f0fdf4; /* Nuansa segar hijau lembut */
+  --bg-gradient-end: #ecfdf5;
+  --surface: #ffffff;
+  --surface-subtle: #f8fafc;
+  --border: #e2e8f0;
+  --border-focus: #10b981;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-light: #94a3b8;
+
+  /* Bayangan & Radius */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  /* Tipografi */
+  --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, #f8fafc 50%, var(--bg-gradient-end) 100%);
+  color: var(--text-main);
+  min-height: 100vh;
+  padding: 24px 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ==========================================================================
+   HEADER SECTION
+   ========================================================================== */
+.header-section {
+  text-align: center;
+  padding: 20px 16px 12px;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 12px;
+  letter-spacing: 0.3px;
+}
+
+.main-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #064e3b;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   MAIN GRID (2 COLUMNS ON DESKTOP)
+   ========================================================================== */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.badge-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  background-color: var(--surface-subtle);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+}
+
+.tag-primary {
+  color: var(--primary);
+  background-color: var(--primary-light);
+  border-color: rgba(5, 150, 105, 0.2);
+}
+
+/* ==========================================================================
+   AI STATUS PILL
+   ========================================================================== */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: var(--idle);
+}
+
+.status-dot.pulsing {
+  background-color: var(--warning);
+  animation: pulse-ring 1.5s infinite;
+}
+
+.status-dot.ready {
+  background-color: var(--success);
+  box-shadow: 0 0 8px rgba(22, 163, 74, 0.6);
+}
+
+.status-dot.active {
+  background-color: #0284c7;
+  box-shadow: 0 0 8px rgba(2, 132, 199, 0.6);
+  animation: pulse-active 1.2s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+@keyframes pulse-active {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* ==========================================================================
+   WEBCAM CONTAINER & OVERLAY
+   ========================================================================== */
+.webcam-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 380px;
+  background-color: #0f172a;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border);
+}
+
+.camera-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  color: #94a3b8;
+}
+
+.placeholder-icon {
+  font-size: 3rem;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+
+.placeholder-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  margin-bottom: 4px;
+}
+
+.placeholder-desc {
+  font-size: 0.85rem;
+  max-width: 280px;
+  color: #94a3b8;
+}
+
+.webcam-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.webcam-container canvas,
+.webcam-container video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  display: block;
+}
+
+.scan-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.scan-reticle {
+  width: 60%;
+  height: 60%;
+  border: 2px dashed rgba(255, 255, 255, 0.7);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.25);
+  animation: scan-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes scan-pulse {
+  0%, 100% { border-color: rgba(16, 185, 129, 0.7); }
+  50% { border-color: rgba(255, 255, 255, 0.8); }
+}
+
+.scan-tip {
+  margin-top: 10px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+}
+
+/* ==========================================================================
+   BUTTONS
+   ========================================================================== */
+.camera-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  width: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--primary-hover) 0%, #0f766e 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(5, 150, 105, 0.4);
+}
+
+.btn-primary:disabled {
+  background: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+/* ==========================================================================
+   CHARACTERISTICS SECTION (Warna & Bentuk)
+   ========================================================================== */
+.characteristics-box {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.char-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.char-icon {
+  font-size: 1.1rem;
+}
+
+.char-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.char-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .char-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.char-item {
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.char-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+}
+
+.char-value-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #cbd5e1;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px var(--border);
+  flex-shrink: 0;
+}
+
+.char-val {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.char-examples {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: rgba(209, 250, 229, 0.4);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent);
+}
+
+/* ==========================================================================
+   RESULTS & ELIGIBILITY BADGE
+   ========================================================================== */
+.eligibility-status-badge {
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.4px;
+  transition: all 0.3s ease;
+}
+
+.status-idle {
+  background: var(--idle-bg);
+  color: var(--idle);
+}
+
+.status-passed {
+  background: var(--success-bg);
+  color: var(--success);
+  border: 1px solid rgba(22, 163, 74, 0.3);
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15);
+}
+
+.status-rejected {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
+}
+
+.status-low {
+  background: var(--warning-bg);
+  color: var(--warning);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+
+/* ==========================================================================
+   MAIN RESULT DISPLAY (LARGE TYPOGRAPHY & CARDS)
+   ========================================================================== */
+.main-result-display {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+
+.main-result-display.highlight {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.12);
+}
+
+.result-icon-large {
+  font-size: 3.5rem;
+  line-height: 1;
+  width: 76px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.result-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.result-label-large {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.result-subtext {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   FEASIBILITY / CONFIDENCE PROGRESS BAR
+   ========================================================================== */
+.feasibility-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface-subtle);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.feasibility-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.feasibility-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.feasibility-percent {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s ease;
+}
+
+.progress-bar-container {
+  position: relative;
+  height: 16px;
+  background-color: #e2e8f0;
+  border-radius: var(--radius-full);
+  overflow: visible;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  transition: width 0.25s ease, background 0.3s ease;
+  box-shadow: 0 1px 3px rgba(5, 150, 105, 0.3);
+}
+
+.threshold-marker {
+  position: absolute;
+  left: 60%;
+  top: -6px;
+  bottom: -6px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.threshold-line {
+  width: 2px;
+  height: 100%;
+  background-color: #0f172a;
+  opacity: 0.5;
+}
+
+.threshold-tag {
+  position: absolute;
+  top: -20px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.feasibility-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.feasibility-state {
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   RECOMMENDATION CARDS (SARAN KELAYAKAN & TEMPAT SAMPAH)
+   ========================================================================== */
+.recommendation-card {
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.recommendation-card.valid-card {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.recommendation-card.invalid-card {
+  border-color: #fca5a5;
+  background: #fef2f2;
+}
+
+.rec-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rec-icon {
+  font-size: 1.2rem;
+}
+
+.rec-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.rec-body p {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+.waste-rec-card {
+  background: #ecfdf5;
+  border: 1px dashed #6ee7b7;
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.waste-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.waste-icon {
+  font-size: 1.1rem;
+}
+
+.waste-header h4 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #065f46;
+}
+
+.waste-desc {
+  font-size: 0.825rem;
+  color: #047857;
+  line-height: 1.45;
+}
+
+/* ==========================================================================
+   PROBABILITY BREAKDOWN BARS
+   ========================================================================== */
+.probabilities-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 4px;
+}
+
+.prob-header {
+  font-size: 0.825rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.prob-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.prob-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.prob-score {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+.prob-bar-track {
+  height: 8px;
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.prob-bar-fill {
+  height: 100%;
+  background: #94a3b8;
+  border-radius: var(--radius-full);
+  transition: width 0.2s ease, background-color 0.2s ease;
+}
+
+.prob-item.active-class .prob-name {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.prob-item.active-class .prob-score {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.prob-item.active-class .prob-bar-fill {
+  background: var(--primary);
+}
+
+/* ==========================================================================
+   FOOTER & EDUCATION SECTION
+   ========================================================================== */
+.footer-edu {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  padding-top: 8px;
+}
+
+.edu-box {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  box-shadow: var(--shadow-sm);
+  max-width: 900px;
+  width: 100%;
+}
+
+.edu-badge-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  background: var(--primary-light);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+}
+
+.edu-text-group strong {
+  font-size: 0.95rem;
+  color: #064e3b;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.edu-text-group p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.footer-credit {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  text-align: center;
+}
+
+/* ==========================================================================
+   ERROR MODAL DIALOG
+   ========================================================================== */
+.error-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.dialog-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-box {
+  position: relative;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  animation: dialog-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes dialog-pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.dialog-icon {
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.dialog-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.dialog-message {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Responsivitas Tambahan Layar Kecil */
+@media (max-width: 600px) {
+  body {
+    padding: 16px 12px;
+  }
+  
+  .main-title {
+    font-size: 1.75rem;
+  }
+  
+  .card {
+    padding: 16px;
+  }
+
+  .main-result-display {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px;
+  }
+
+  .result-label-large {
+    font-size: 1.5rem;
+  }
+}

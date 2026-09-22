@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Equipment Checker - Deteksi Benda Sekolah</title>
+  
+  <!-- Font Modern & Ramah Siswa -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Utama -->
+  <link rel="stylesheet" href="style.css">
+  
+  <!-- TensorFlow.js & Teachable Machine CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- Header Halaman -->
+    <header class="header-section">
+      <div class="header-badge">
+        <span class="badge-icon">🏫</span>
+        <span>AI Edukasi Siswa</span>
+      </div>
+      <h1 class="main-title">School Equipment Checker</h1>
+      <p class="subtitle">Gunakan Kamera untuk dapat melihat kelayakan benda untuk sekolah</p>
+    </header>
+
+    <!-- Konten Utama: 2 Kolom di Desktop -->
+    <main class="main-grid">
+      
+      <!-- KOLOM KIRI: Kamera & Karakteristik Benda -->
+      <section class="card camera-card">
+        <div class="card-header">
+          <div class="status-pill" id="aiStatusPill">
+            <span class="status-dot pulsing" id="statusDot"></span>
+            <span id="aiStatusText">Memuat AI...</span>
+          </div>
+          <span class="badge-tag">Pendeteksi Real-Time</span>
+        </div>
+
+        <!-- Area Video Kamera -->
+        <div class="webcam-box" id="webcamWrapper">
+          <div class="camera-placeholder" id="cameraPlaceholder">
+            <div class="placeholder-icon">📸</div>
+            <p class="placeholder-title">Kamera Belum Aktif</p>
+            <p class="placeholder-desc">Klik tombol "Mulai Kamera" di bawah untuk mengaktifkan pendeteksian benda.</p>
+          </div>
+          
+          <!-- Canvas kamera dari Teachable Machine disisipkan di sini -->
+          <div id="webcamContainer" class="webcam-container"></div>
+          
+          <!-- Reticle / Target Area Scan -->
+          <div class="scan-overlay" id="scanOverlay" style="display: none;">
+            <div class="scan-reticle"></div>
+            <span class="scan-tip">Arahkan benda di tengah kotak</span>
+          </div>
+        </div>
+
+        <!-- Tombol Kontrol Kamera -->
+        <div class="camera-actions">
+          <button id="btnToggleCamera" class="btn btn-primary" disabled>
+            <span id="btnCameraIcon">▶</span>
+            <span id="btnCameraText">Mulai Kamera</span>
+          </button>
+        </div>
+
+        <!-- Bagian Kecil: Karakteristik Benda -->
+        <div class="characteristics-box">
+          <div class="char-header">
+            <span class="char-icon">🔍</span>
+            <h3 class="char-title">Karakteristik Benda</h3>
+          </div>
+          <div class="char-grid">
+            <div class="char-item">
+              <span class="char-label">Warna Benda</span>
+              <div class="char-value-row">
+                <span class="color-dot" id="detectedColorDot"></span>
+                <span class="char-val" id="detectedColorText">Menunggu kamera...</span>
+              </div>
+            </div>
+            <div class="char-item">
+              <span class="char-label">Bentuk Benda</span>
+              <span class="char-val" id="detectedShapeText">Menunggu kamera...</span>
+            </div>
+          </div>
+          <div class="char-examples">
+            <small>📌 <strong>Contoh Karakteristik:</strong></small>
+            <small>~ <strong>Warna:</strong> pink, kuning, hijau, hitam, biru, dll.</small>
+            <small>~ <strong>Bentuk:</strong> Pulpen, Tip x, Sepatu</small>
+          </div>
+        </div>
+      </section>
+
+      <!-- KOLOM KANAN: Hasil Deteksi & Kelayakan & Saran -->
+      <section class="card results-card">
+        
+        <div class="card-header">
+          <span class="badge-tag tag-primary">Status Kelayakan</span>
+          <div class="eligibility-status-badge status-idle" id="eligibilityBadge">
+            Menunggu Kamera
+          </div>
+        </div>
+
+        <!-- Tampilan Hasil Deteksi Utama (Jelas & Besar) -->
+        <div class="main-result-display" id="mainResultDisplay">
+          <div class="result-icon-large" id="resultIcon">🔍</div>
+          <div class="result-details">
+            <h2 class="result-label-large" id="resultLabel">Belum Terdeteksi</h2>
+            <p class="result-subtext" id="resultSubtext">Aktifkan kamera untuk menguji kelayakan benda sekolah</p>
+          </div>
+        </div>
+
+        <!-- Indikator Tingkat Kelayakan (Feasibility) -->
+        <div class="feasibility-section">
+          <div class="feasibility-labels">
+            <span class="feasibility-title">Tingkat Kelayakan (Feasibility)</span>
+            <span class="feasibility-percent" id="feasibilityPercent">0%</span>
+          </div>
+          
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="feasibilityBar" style="width: 0%;"></div>
+            <div class="threshold-marker" title="Batas Kelayakan 60%">
+              <span class="threshold-line"></span>
+              <span class="threshold-tag">Batas: 60%</span>
+            </div>
+          </div>
+          
+          <div class="feasibility-meta">
+            <span id="feasibilityNote">Threshold kelayakan: &gt;60% diperbolehkan</span>
+            <span class="feasibility-state" id="feasibilityState">Menunggu</span>
+          </div>
+        </div>
+
+        <!-- Saran & Rekomendasi Benda Sekolah -->
+        <div class="recommendation-card" id="recommendationCard">
+          <div class="rec-title-row">
+            <span class="rec-icon" id="recIcon">📋</span>
+            <h3 class="rec-title" id="recTitle">Saran & Hasil Evaluasi</h3>
+          </div>
+          <div class="rec-body" id="recBody">
+            <p id="recMessage">Nyalakan kamera dan arahkan benda sekolah ke hadapan kamera untuk melihat evaluasi kelayakan secara otomatis.</p>
+          </div>
+        </div>
+
+        <!-- Bagian Rekomendasi Tempat Sampah & Edukasi Lingkungan Bersih -->
+        <div class="waste-rec-card" id="wasteCard">
+          <div class="waste-header">
+            <span class="waste-icon">♻️</span>
+            <h4>Rekomendasi Tempat Sampah & Kebersihan</h4>
+          </div>
+          <p class="waste-desc" id="wasteDesc">
+            Kebersihan sekolah adalah tanggung jawab bersama. Gunakan tempat sampah yang tepat sesuai jenis bahannya.
+          </p>
+        </div>
+
+        <!-- Rincian Probabilitas Semua Benda -->
+        <div class="probabilities-container">
+          <h4 class="prob-header">Detail Analisis Model AI:</h4>
+          <div class="prob-item" id="item-Pulpen">
+            <div class="prob-info">
+              <span class="prob-name">🖊️ Pulpen</span>
+              <span class="prob-score" id="score-Pulpen">0%</span>
+            </div>
+            <div class="prob-bar-track">
+              <div class="prob-bar-fill" id="bar-Pulpen" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div class="prob-item" id="item-TipX">
+            <div class="prob-info">
+              <span class="prob-name">❌ Tip X</span>
+              <span class="prob-score" id="score-TipX">0%</span>
+            </div>
+            <div class="prob-bar-track">
+              <div class="prob-bar-fill" id="bar-TipX" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <div class="prob-item" id="item-Sepatu">
+            <div class="prob-info">
+              <span class="prob-name">👞 Sepatu</span>
+              <span class="prob-score" id="score-Sepatu">0%</span>
+            </div>
+            <div class="prob-bar-track">
+              <div class="prob-bar-fill" id="bar-Sepatu" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Informasi Edukatif untuk Siswa -->
+    <footer class="footer-edu">
+      <div class="edu-box">
+        <span class="edu-badge-icon">💡</span>
+        <div class="edu-text-group">
+          <strong>Tahukah Kamu?</strong>
+          <p>
+            AI ini menggunakan jaringan saraf tiruan (neural network) melalui Teachable Machine yang dilatih untuk mengenali pola piksel benda sekolah (Pulpen, Tip X, dan Sepatu). Ketika tingkat kelayakan mencapai lebih dari 60%, AI meyakini benda tersebut teridentifikasi sesuai dengan modelnya.
+          </p>
+        </div>
+      </div>
+      <div class="footer-credit">
+        School Equipment Checker • Antarmuka Siswa Mandiri Berbasis Web AI
+      </div>
+    </footer>
+
+    <!-- Modal Dialog untuk Penanganan Error -->
+    <div class="error-dialog" id="errorDialog" style="display: none;">
+      <div class="dialog-backdrop"></div>
+      <div class="dialog-box">
+        <div class="dialog-icon" id="dialogIcon">⚠️</div>
+        <h3 class="dialog-title" id="dialogTitle">Peringatan Sistem</h3>
+        <p class="dialog-message" id="dialogMessage">Terjadi kesalahan.</p>
+        <button class="btn btn-primary" id="btnDialogClose">Mengerti</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Logika Interaktif JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
